@@ -63,7 +63,7 @@ header {
   height: 350px; }
 
 .flipper {
-  transition: 60s;
+  transition: 0.2s;
   transform-style: preserve-3d;
   position: relative; }
 
@@ -77,6 +77,18 @@ header {
 .front {
   z-index: 2;
   background-color: #bbbbbb; }
+
+.wrapper__image {
+  width: 100%;
+  height: 90%; }
+  .wrapper__image img {
+    width: 100%;
+    height: 100%; }
+
+.name-hero {
+  text-align: center; }
+  .name-hero h1 {
+    margin: 0; }
 
 .back {
   transform: rotateY(180deg);
