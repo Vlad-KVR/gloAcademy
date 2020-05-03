@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-trailing-spaces */
 /* eslint-disable indent */
@@ -24,23 +25,34 @@ const getData = callback => {
 
 const addCards = data => {
     console.log(data);
-    const flipper = document.querySelectorAll('.flipper');
-    const front = document.querySelectorAll('.wrapper__image');
-    const nameHero = document.querySelectorAll('.name-hero > h1');
+    const flipper = document.querySelectorAll('.flipper'),
+        wrapperImage = document.querySelectorAll('.wrapper__image'),
+        back = document.querySelectorAll('.back'),
+        nameHero = document.querySelectorAll('.name-hero > h1');
+
 
     const addFront = (img, name, dataItem) => {
         const newImg = document.createElement('img');
         newImg.src = "dbHeroes-master/" + dataItem.photo;
         img.append(newImg);
         name.textContent = dataItem.name;
+        name.parentNode.classList.add('name-active');
     };
 
-    const addBack = () => {
-        
+    const addBack = (back, name, dataItem) => {
+        const div = document.createElement('div');
+        for (let key in dataItem) {
+            if (key !== 'photo') {
+                div.insertAdjacentHTML("beforeend", 
+                `<p>${key}: ${dataItem[key]}</p>`);
+            }
+        }
+        back.append(div);
     };
 
-    for (let i = 0; i < front.length; i++) {
-        addFront(front[i], nameHero[i], data[i]);
+    for (let i = 0; i < wrapperImage.length; i++) {
+        addFront(wrapperImage[i], nameHero[i], data[i]);
+        addBack(back[i], nameHero[i], data[i]);
     }
 
     // front.forEach(item => {

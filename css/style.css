@@ -86,13 +86,26 @@ header {
     height: 100%; }
 
 .name-hero {
-  text-align: center; }
+  height: 10%;
+  text-align: center;
+  vertical-align: middle; }
   .name-hero h1 {
     margin: 0; }
 
+.name-active {
+  background-color: #A25429;
+  color: whitesmoke; }
+
 .back {
   transform: rotateY(180deg);
-  background-color: #9b9b9b; }
+  background-color: #A25429;
+  padding-left: 10px; }
+  .back div {
+    width: 100%;
+    max-height: 350px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    color: whitesmoke; }
 
 .pagination {
   padding-top: 20px;

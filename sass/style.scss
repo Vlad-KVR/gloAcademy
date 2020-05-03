@@ -1,5 +1,6 @@
 $black:rgb(48, 48, 48);
 $orange:#d84d00;
+$second: #A25429;
 *{
     font-family: sans-serif;
 }
@@ -107,14 +108,28 @@ header{
     }
 }
 .name-hero{
+    height: 10%;
     text-align: center;
+    vertical-align: middle;
     h1{
         margin: 0;
     }
 }
+.name-active{
+    background-color: $second;
+    color: whitesmoke;
+}
 .back {
     transform: rotateY(180deg);
-    background-color: rgb(155, 155, 155);
+    background-color: $second;
+    padding-left: 10px;
+    div{
+        width: 100%;
+        max-height: 350px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        color: whitesmoke;
+    }
 }
 
 .pagination {
