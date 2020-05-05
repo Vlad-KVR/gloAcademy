@@ -11,6 +11,7 @@ wrapperImage = document.querySelectorAll('.wrapper__image'),
 back = document.querySelectorAll('.back'),
 nameHero = document.querySelectorAll('.name-hero > h1');
 let currentPage = 1;
+let listFilms = [];
 
 
 //получение данных
@@ -32,7 +33,7 @@ const getData = callback => {
     setTimeout(() => request.send(), 1000);
 };
 
-//добавление карточек
+//добавление информации в карточки
 const addCards = data => {
 
     console.log(data);
@@ -85,6 +86,7 @@ const addCards = data => {
 
 };
 
+//удаление информации с карточек
 const removeCards = () => {
 
     wrapperImage.forEach(item => item.textContent = '');
@@ -103,13 +105,22 @@ const removeCards = () => {
 
 //пагинация
 const pagination = (data, pageNumber) => {
-
     const pagination = document.querySelector('.pagination');
+
     let pageNumbers = document.querySelectorAll('.page-number');
+    for (let i = 0; i < 3; i++) {
+        if (!pageNumbers[i]) {
+            const copy = pageNumbers[0].cloneNode(true);
+            copy.classList.remove('page-active');
+            copy.textContent = i + 1;
+            pagination.append(copy);
+        }
+    }
+    pageNumbers = document.querySelectorAll('.page-number');
 
     const countPage = Math.floor(data.length / 10);
 
-    
+    console.log(countPage);
     
 
     const togglePageActive = () => {
@@ -119,6 +130,11 @@ const pagination = (data, pageNumber) => {
 
     const startPage = target => {
         togglePageActive();
+
+        pageNumbers.forEach((item, i) => item.textContent = i + 1);
+        removeStartPage();
+        removeLastPage();
+
         currentPage = pageNumbers[0];
         togglePageActive();
 
@@ -142,36 +158,15 @@ const pagination = (data, pageNumber) => {
         removeLastPage();
 
         const targetNumber = +target.textContent;
-        let j = -2;
+        let j = pageNumbers.length > 2 ? -2 : -1;
         pageNumbers.forEach(item => {
             item.textContent = targetNumber + j;
             j++;
         });
         currentPage = pageNumbers[2];
         togglePageActive();
-    };
-    
-    const addLastPage = () => {
-        console.log(pageNumbers);
-        if (pageNumbers[3]) return;
-        pagination.insertAdjacentHTML('beforeend', `<span>...</span>
-                <a href="#" class="page-number">${countPage}</a>`);
-        pageNumbers = document.querySelectorAll('.page-number');
-    };
 
-    const removeLastPage = () => {
-        if (!pageNumbers[3]) return;
-        document.querySelector('.pagination > span').remove();
-        pageNumbers[3].remove();
-        pageNumbers = document.querySelectorAll('.page-number'); 
-    };
-
-    const editPagination = () => {
-        if (+pageNumbers[2].textContent === countPage) {
-            removeLastPage();
-        } else {
-            addLastPage();
-        }
+        if (countPage > 3) addStartPage();
     };
 
     const switchPage = target => {
@@ -179,8 +174,7 @@ const pagination = (data, pageNumber) => {
         if (target.textContent === '1') {
             startPage(target);
             return;
-        }
-        if (target.textContent === countPage.toString()) {
+        } else if (target.textContent === countPage.toString()) {
             lastPage(target);
             return;
         }
@@ -198,13 +192,50 @@ const pagination = (data, pageNumber) => {
         togglePageActive();
         editPagination();
     };
+    
+    const addLastPage = () => {
+        if (document.getElementById('sp2')) return;
+        pagination.insertAdjacentHTML('beforeend', `<span id="sp2">...</span>
+                <a href="#" id="last-page" class="trigger">${countPage}</a>`);
+    };
+
+    const removeLastPage = () => {
+        if (!document.getElementById('sp2')) return;
+        document.getElementById('sp2').remove();
+        document.getElementById('last-page').remove();
+    };
+
+    const addStartPage = () => {
+        if (document.getElementById('sp1')) return;
+        pagination.insertAdjacentHTML('afterbegin', `<a href="#" id="start-page" class="trigger">1</a>
+                <span id="sp1">...</span>`);
+    };
+
+    const removeStartPage = () => {
+        if (!document.getElementById('sp1')) return;
+        document.getElementById('sp1').remove();
+        document.getElementById('start-page').remove();
+    };
+
+    const editPagination = () => {
+        if (+pageNumbers[2].textContent === countPage) {
+            removeLastPage();
+        } else {
+            addLastPage();
+        }
+
+        if (+pageNumbers[0].textContent === 1) {
+            removeStartPage();
+        } else {
+            addStartPage();
+        }
+    };
 
     const addNewCards = () => {
         const topBound = +currentPage.textContent * 10,
             bottomBound = +currentPage.textContent * 10 - 10;
-        console.log(topBound, bottomBound);
+
         const newData = data.filter((item, i) => i >= bottomBound && i < topBound);
-        console.log(newData);
         removeCards();
         addCards(newData);
     };
@@ -217,7 +248,7 @@ const pagination = (data, pageNumber) => {
     pagination.addEventListener('click', event => {
         event.preventDefault();
         if (!event.target.classList.contains("page-active") &&
-        event.target.classList.contains('page-number')) {
+        (event.target.classList.contains('page-number') || event.target.classList.contains('trigger'))) {
             switchPage(event.target);
             addNewCards();
         }
@@ -226,7 +257,68 @@ const pagination = (data, pageNumber) => {
 };
 
 
+//фильтер по фильмам
+const filterFilms = (data, searchFilm) => {
+    return data.filter(item => {
+        if (!item.movies) return false;
+        return [...item.movies].some(film => film.toLowerCase() === searchFilm.toLowerCase());
+    });
+};
 
+//поиск по фильмам
+const searchFilm = data => {
+    const input = document.getElementById('search'),
+        dropdown = document.querySelector('.dropdown'),
+        formSearch = document.getElementById('form-search');
+
+    data.forEach(item => listFilms = listFilms.concat(item.movies));
+    listFilms = listFilms.filter((item, i) => listFilms.indexOf(item) === i && item !== undefined);
+
+    const showFilms = () => {
+        dropdown.textContent = '';
+
+        if (input.value === '') return;
+
+        const filterFilms = listFilms.filter(item => {
+            const fixItem = item.toLowerCase();
+            return fixItem.startsWith(input.value.toLowerCase());
+        });
+
+        filterFilms.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item;
+            dropdown.append(li);
+        });
+    };
+
+    const handlerFilm = event => {
+        const target = event.target;
+        if (target.tagName.toLowerCase() === 'li') {
+            input.value = target.textContent;
+            dropdown.textContent = '';
+        }
+    };
+
+
+    input.addEventListener('input', showFilms);
+    dropdown.addEventListener('click', event => {
+        handlerFilm(event);
+    });
+    formSearch.addEventListener('submit', event => {
+        event.preventDefault();
+
+        if (input.value === '') {
+            alert('Enter movie name');
+            return;
+        }
+
+        const newData = filterFilms(data, input.value);
+        console.log(newData);
+        pagination(newData);
+        removeCards();
+        addCards(newData);
+    });
+};
 
 
 
@@ -235,5 +327,6 @@ const pagination = (data, pageNumber) => {
 getData(data => {
     pagination(data);
     addCards(data);
+    searchFilm(data);
 });
 
