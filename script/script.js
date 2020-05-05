@@ -3,6 +3,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-trailing-spaces */
 /* eslint-disable indent */
+/**
+ * by: Vladislasv Kovalyov
+ * email: max2433186@gmail.com
+ * 
+ * Простите пожалуйста, я старался)
+ */
 'use strict';
 
 
@@ -118,7 +124,7 @@ const pagination = (data, pageNumber) => {
     }
     pageNumbers = document.querySelectorAll('.page-number');
 
-    const countPage = Math.floor(data.length / 10);
+    const countPage = Math.ceil(data.length / 10);
 
     console.log(countPage);
     
@@ -231,28 +237,29 @@ const pagination = (data, pageNumber) => {
         }
     };
 
-    const addNewCards = () => {
+    const addNewCards = data => {
         const topBound = +currentPage.textContent * 10,
             bottomBound = +currentPage.textContent * 10 - 10;
-
+        console.log(data);
         const newData = data.filter((item, i) => i >= bottomBound && i < topBound);
         removeCards();
         addCards(newData);
     };
 
-    
-
-    startPage();
-    
-
-    pagination.addEventListener('click', event => {
+    const eventPagination = event => {
         event.preventDefault();
         if (!event.target.classList.contains("page-active") &&
         (event.target.classList.contains('page-number') || event.target.classList.contains('trigger'))) {
             switchPage(event.target);
-            addNewCards();
+            addNewCards(data);
         }
-    });
+    };
+
+    startPage();
+    
+    
+    pagination.removeEventListener('click', eventPagination);
+    pagination.addEventListener('click', eventPagination);
 
 };
 
