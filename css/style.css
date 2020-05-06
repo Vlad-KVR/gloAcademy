@@ -116,6 +116,8 @@ input:-ms-input-placeholder {
   transform: rotateY(180deg);
   background-color: #A25429;
   padding-left: 10px; }
+  .back p {
+    width: 95%; }
   .back div {
     width: 100%;
     max-height: 350px;

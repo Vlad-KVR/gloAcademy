@@ -157,7 +157,9 @@ input:-ms-input-placeholder {
     transform: rotateY(180deg);
     background-color: $second;
     padding-left: 10px;
-
+    p{
+        width: 95%;
+    }
     div {
         width: 100%;
         max-height: 350px;
