@@ -11,115 +11,152 @@
  */
 'use strict';
 
+// const flipper = document.querySelectorAll('.flipper'),
+// 	wrapperImage = document.querySelectorAll('.wrapper__image'),
+// 	back = document.querySelectorAll('.back'),
+// 	nameHero = document.querySelectorAll('.name-hero > h1');
 
-const flipper = document.querySelectorAll('.flipper'),
-	wrapperImage = document.querySelectorAll('.wrapper__image'),
-	back = document.querySelectorAll('.back'),
-	nameHero = document.querySelectorAll('.name-hero > h1');
-let listFilms = [],
-	listHero = [];
 
 //получение данных
-const getData = callback => {
+const getData = () => fetch("./../dbHeroes-master/dbHeroes.json");
+// const request = new XMLHttpRequest();
+	// request.open("GET", "./../dbHeroes-master/dbHeroes.json");
 
-	const request = new XMLHttpRequest();
-	request.open("GET", "./../dbHeroes-master/dbHeroes.json");
-
-    request.addEventListener('readystatechange', () => {
-        if (request.readyState !== 4) return;
+    // request.addEventListener('readystatechange', () => {
+    //     if (request.readyState !== 4) return;
         
-        if (request.status === 200) {
-            callback(JSON.parse(request.response));
-        } else {
-            throw new Error(request.status + " " + request.statusText);
+    //     if (request.status === 200) {
+    //         callback(JSON.parse(request.response));
+    //     } else {
+    //         throw new Error(request.status + " " + request.statusText);
+    //     }
+    // });
+
+    // setTimeout(() => request.send(), 1000);
+
+
+//добавляем и удаляем информацию со страницы
+//Используем только addCards(data) и removeCards()
+class Cards {
+    constructor(wrapperImage, nameHero, back) {
+        this.DATA = {};
+        this._wrapperImage = wrapperImage;
+        this._nameHero = nameHero;
+        this._back = back;
+    }
+    //add
+    addCards(data) {
+    
+        for (let i = 0; i < this._wrapperImage.length; i++) {
+            this.addFront(this._wrapperImage[i], this._nameHero[i], data[i]);
+            this.addBack(this._back[i], data[i]);
         }
-    });
-
-    setTimeout(() => request.send(), 1000);
-};
-
-
-
-//добавление информации в карточки
-const addCards = data => {
-
-    console.log(data);
-
-    const addFront = (img, name, dataItem) => {
-		if (!dataItem) return;
-        const newImg = document.createElement('img');
-        newImg.src = "dbHeroes-master/" + dataItem.photo;
-        img.append(newImg);
-        name.textContent = dataItem.name;
-        name.parentNode.classList.add('name-active');
-
-    };
-
-    const addBack = (back, name, dataItem) => {
-		if (!dataItem) return;
-        const div = document.createElement('div');
-
-        for (let key in dataItem) {
-
-            if (key !== 'photo' && key !== 'movies') {
-
-                div.insertAdjacentHTML("beforeend", 
-                `<p>${key[0].toUpperCase() + key.slice(1)}: ${dataItem[key]}</p>`);
-
-            } else if (key === 'movies') {
-
-                const arrLinks = dataItem[key].map((item, i, arr) => {
-                    const a = document.createElement('a');
-                    a.href = '#';
-                    a.textContent = i !== arr.length - 1 ? item + ", " : item;
-                    return a;
-                });
-                const p = document.createElement('p');
-                p.textContent = 'Movies: ';
-                arrLinks.forEach(elem => p.append(elem));
-                div.append(p);
-
-            }
-        }
-
-        back.append(div);
-        back.parentNode.classList.add('flipper-active');
-    };
-
-    for (let i = 0; i < wrapperImage.length; i++) {
-        addFront(wrapperImage[i], nameHero[i], data[i]);
-        addBack(back[i], nameHero[i], data[i]);
+        
     }
 
-};
+    addFront(img, name, dataItem) {
 
+            if (!dataItem) return;
+            const newImg = document.createElement('img');
+            newImg.src = "dbHeroes-master/" + dataItem.photo;
+            img.append(newImg);
+            name.textContent = dataItem.name;
+            name.parentNode.classList.add('name-active');
+    
+    }
 
+    addBack(back, dataItem) {
+        if (!dataItem) return;
+    
+            back.append(this.createDivForBack(dataItem));
+            back.parentNode.classList.add('flipper-active');
+    }
 
-//удаление информации с карточек
-const removeCards = () => {
+    createDivForBack(dataItem) {
+        const div = document.createElement('div');
+    
+            for (let key in dataItem) {
+    
+                if (key !== 'photo' && key !== 'movies') {
+    
+                    div.insertAdjacentHTML("beforeend", 
+                    `<p>${key[0].toUpperCase() + key.slice(1)}: ${dataItem[key]}</p>`);
+    
+                } else if (key === 'movies') {
+    
+                    const arrLinks = dataItem[key].map((item, i, arr) => {
+                        const a = document.createElement('a');
+                        a.href = '#';
+                        a.textContent = i !== arr.length - 1 ? item + ", " : item;
+                        a.classList.add('film');
+                        return a;
+                    });
+                    const p = document.createElement('p');
+                    p.textContent = 'Movies: ';
+                    arrLinks.forEach(elem => p.append(elem));
+                    div.append(p);
+    
+                }
+            }
 
-    wrapperImage.forEach(item => item.textContent = '');
+            return div;
+    }
 
-    nameHero.forEach(item => {
-        item.textContent = '';
-        item.parentNode.classList.remove('name-active');
-    });
+    //remove
+    removeCards() {
 
-    back.forEach(item => {
-        item.textContent = '';
-        item.parentNode.classList.remove('flipper-active');
-    });
-};
+        this._wrapperImage.forEach(item => item.textContent = '');
+    
+        this._nameHero.forEach(item => {
+            item.textContent = '';
+            item.parentNode.classList.remove('name-active');
+        });
+    
+        this._back.forEach(item => {
+            item.textContent = '';
+            item.parentNode.classList.remove('flipper-active');
+        });
+    }
+
+    createNewCards(newData) {
+        this.removeCards();
+        this.addCards(newData);
+    }
+
+    eventListener() {
+        this._back.forEach(item => {
+            item.addEventListener('click', event => {
+                event.preventDefault();
+                const target = event.target;
+                if (target.classList.contains('film')) {
+                    const film = target.textContent.replace(/,/, '');
+                    DATA.filterFilm(film.trim());
+                }
+            });
+        });
+    }
+
+    init(DATA) {
+        this.DATA = DATA;
+        this.addCards(DATA.data);
+        this.eventListener();
+    }
+}
+const cards = new Cards(document.querySelectorAll('.wrapper__image'),
+                        document.querySelectorAll('.name-hero > h1'),
+                        document.querySelectorAll('.back'));
+
 
 
 //пагинация
 //используем только init() и refresh(newData), ну и set data
 class Pagination {
-	constructor(data) {
-		this._data = data;
+	constructor(cards) {
+        this._cards = cards;
+		this._data = [];
 		this._pagination = document.querySelector('.pagination');
 		this._pageNumbers = document.querySelectorAll('.page-number');
-		this._countPage = Math.ceil(data.length / 10);
+		this._countPage = 0;
 		this._currentPage = 1;
 	}
 
@@ -146,8 +183,6 @@ class Pagination {
 
 	togglePageActive() {
 		if ((typeof this._currentPage) === 'number') return;
-		console.log(this._pageNumbers);
-		console.log(this._currentPage);
         this._currentPage.classList.toggle('page-active');
 	}
 	
@@ -259,8 +294,7 @@ class Pagination {
 			bottomBound = +this._currentPage.textContent * 10 - 10;
 			
         const newData = data.filter((item, i) => i >= bottomBound && i < topBound);
-        removeCards();
-        addCards(newData);
+        this._cards.createNewCards(newData);
 	}
 	
 	eventPagination(event) {
@@ -282,7 +316,8 @@ class Pagination {
 		this._pagination.removeEventListener('click', this.eventPagination.bind(this), false);
 	}
 
-	init() {		
+	init(data) {
+        this.data = data;		
 		this.pageNumbersRefresh();
 		this.startPage();
 		this.startEvent();
@@ -295,25 +330,66 @@ class Pagination {
 	}
 }
 
-const pagination = new Pagination(listHero);
+const pagination = new Pagination(cards);
 
 
-//фильтер по фильмам
-const filterFilms = (data, searchFilm) => data.filter(item => {
-        if (!item.movies) return false;
-        return [...item.movies].some(film => film.toLowerCase() === searchFilm.toLowerCase());
-    });
+// хранит данные и запускает фильтры
+class Data {
+    constructor() {
+        this._data = [];
+        this._listFilms = [];
+    }
+
+    get data() {
+        return this._data;
+    }
+    set data(data) {
+        this._data = data;
+    }
+
+    get listFilms() {
+        return this._listFilms;
+    }
+
+    set listFilms(listFilms) {
+        this._listFilms = listFilms;
+    }
+
+    filterFilm(searchFilm) { 
+        const newData = this._data.filter(item => {
+            if (!item.movies) return false;
+            return [...item.movies].some(film => film.toLowerCase() === searchFilm.toLowerCase());
+        });
+
+        pagination.refresh(newData);
+        cards.createNewCards(newData);
+    }
+
+
+
+    init(data) {
+        this._data = data;
+
+        //заполняем list films списком фильмов
+        data.forEach(item => this._listFilms = this._listFilms.concat(item.movies));
+        this._listFilms = this._listFilms.filter((item, i) => 
+            this._listFilms.indexOf(item) === i && item !== undefined);
+        this._listFilms.sort();
+    }
+}
+
+const DATA = new Data();
+
 
 //поиск по фильмам
-const searchFilm = data => {
+const searchFilm = DATA => {
 	//данные
     const input = document.getElementById('search'),
         dropdown = document.querySelector('.dropdown'),
         formSearch = document.getElementById('form-search');
 
-	//заполняем list films списком фильмов
-    data.forEach(item => listFilms = listFilms.concat(item.movies));
-    listFilms = listFilms.filter((item, i) => listFilms.indexOf(item) === i && item !== undefined);
+
+
 
 	//показываем фильмы в выпадающем списке
     const showFilms = () => {
@@ -321,12 +397,12 @@ const searchFilm = data => {
 
         if (input.value === '') return;
 
-        const filterFilms = listFilms.filter(item => {
+        const createNewFilmsList = DATA.listFilms.filter(item => {
             const fixItem = item.toLowerCase();
             return fixItem.startsWith(input.value.toLowerCase());
         });
 
-        filterFilms.forEach(item => {
+        createNewFilmsList.forEach(item => {
             const li = document.createElement('li');
             li.textContent = item;
             dropdown.append(li);
@@ -344,6 +420,7 @@ const searchFilm = data => {
     };
 
 
+    //обработчики событий
     input.addEventListener('input', showFilms);
     dropdown.addEventListener('click', event => {
         handlerFilm(event);
@@ -357,19 +434,69 @@ const searchFilm = data => {
             return;
         }
 
-        const newData = filterFilms(data, input.value);
-        console.log(newData);
-        pagination.refresh(newData);
-        removeCards();
-        addCards(newData);
+        DATA.filterFilm(input.value);
+        input.value = '';      
     });
 };
 
-getData(data => {
-	listHero = data;
-	pagination.data = listHero;
-	pagination.init();
-	addCards(listHero);
-	searchFilm(listHero);
-});
+const menu = DATA => {
+    const btnMenu = document.querySelector('.menu'),
+    menu = document.querySelector('menu'),
+    ul = document.querySelector('menu > ul');
+
+    const createMenu = () => {
+        const arrLi = [];
+        DATA.listFilms.forEach(item => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = '#';
+            a.textContent = item;
+            li.append(a);
+            li.classList.add('film');
+            ul.append(li);
+        });
+    }; 
+
+    const toggleMenu = () => {
+
+        const handlerMenu = () => {
+            menu.classList.toggle('active-menu');
+        };
+    
+        btnMenu.addEventListener('click', handlerMenu);
+        menu.addEventListener('click', () => {
+            let target = event.target;
+    
+            if (!target.classList.contains('close-btn')) {
+                target = target.closest('li');
+            }
+    
+            if (target) handlerMenu();
+
+            if (target.classList.contains('film')) {
+                DATA.filterFilm(target.firstChild.textContent);
+            }
+            
+        });
+    };
+    
+    createMenu();
+    toggleMenu();
+};
+
+
+
+getData()
+    .then(response => {
+        if (response.status !== 200) throw new Error(response.status);
+        return response.json();
+    })
+    .then(heroes => {
+        DATA.init(heroes);
+        pagination.init(DATA.data);
+        cards.init(DATA);
+        searchFilm(DATA);
+        menu(DATA);
+    })
+    .catch(error => console.error("Ошибка " + error));
 

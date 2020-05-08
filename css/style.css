@@ -6,10 +6,92 @@ body {
   margin: 0; }
 
 header {
-  background-color: #d84d00; }
+  background-color: #d84d00;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 15px 30px; }
+
+body .menu:hover {
+  cursor: pointer; }
+
+body menu {
+  position: fixed;
+  width: 50%;
+  height: 100vh;
+  background-color: #000;
+  opacity: .9;
+  left: 0;
+  margin: 0;
+  top: 0;
+  z-index: 99;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: flex-start;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-transform: translateX(-100%);
+  transform: translateX(-100%); }
+
+body .active-menu {
+  -webkit-transition: 1s;
+  transition: 1s;
+  -webkit-transform: translateX(100%);
+  transform: translateX(100%); }
+
+body .close-btn {
+  position: fixed;
+  top: 30px;
+  left: 30px;
+  font-size: 3rem;
+  -webkit-transition: .2s;
+  transition: .2s;
+  -webkit-transform-origin: 50% 53%;
+  transform-origin: 50% 53%;
+  display: block;
+  line-height: 3rem;
+  text-align: center;
+  width: 3rem;
+  height: 3rem;
+  color: #19b5fe; }
+
+body .close-btn:hover {
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg); }
+
+body menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  line-height: 3; }
+
+body menu li a {
+  font-size: 1.3rem;
+  color: #fff; }
+
+body menu a:hover {
+  text-decoration: none;
+  color: #19b5fe; }
+
+menu {
+  overflow-x: hidden;
+  overflow-y: auto; }
+  menu a {
+    text-decoration: none; }
+
+header .menu {
+  text-align: center;
+  margin-top: 1rem;
+  color: whitesmoke; }
+
+header .menu small {
+  text-transform: uppercase; }
 
 .wrapper__search {
-  padding: 15px 30px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -39,7 +121,7 @@ input:-ms-input-placeholder {
 .dropdown {
   width: 205px;
   position: absolute;
-  top: 36px;
+  top: 22px;
   padding: 0;
   margin: 0;
   background: #fff;
@@ -51,6 +133,7 @@ input:-ms-input-placeholder {
   .dropdown li:hover {
     color: #d84d00; }
   .dropdown li {
+    padding-top: 5px;
     padding-left: 5px;
     font-size: 16px; }
 
