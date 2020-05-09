@@ -12,23 +12,40 @@ body {
     margin: 0;
 }
 
+.scroll-hidden{
+    overflow: hidden;
+}
 header {
     background-color: $orange;
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
     padding: 15px 30px;
+    
 }
 body .menu:hover {
     cursor: pointer
 }
 
+.logo{
+    width: 30%;
+    height: 80px;
+
+    img{
+        cursor: pointer;
+        width: 200px;
+        height: 100%;
+    }
+}
+
+
+
 body menu {
     position: fixed;
-    width: 50%;
+    width: 47.7%;
     height: 100vh;
-    background-color: #000;
-    opacity: .9;
+    background-color: $white;
+    opacity: 1;
     left: 0;
     margin: 0;
     top: 0;
@@ -50,7 +67,7 @@ body .active-menu {
     -webkit-transition: 1s;
     transition: 1s;
     -webkit-transform: translateX(100%);
-    transform: translateX(100%)
+    transform: translateX(100%);
 }
 
 body .close-btn {
@@ -67,7 +84,7 @@ body .close-btn {
     text-align: center;
     width: 3rem;
     height: 3rem;
-    color: #19b5fe
+    color: $orange;
 }
 
 body .close-btn:hover {
@@ -84,12 +101,12 @@ body menu ul {
 
 body menu li a {
     font-size: 1.3rem;
-    color: #fff;
+    color: $black;
 }
 
 body menu a:hover {
     text-decoration: none;
-    color: #19b5fe
+    color: $orange;
 }
 menu {
     overflow-x: hidden;
@@ -167,7 +184,28 @@ input:-ms-input-placeholder {
     }
 }
 
+
+section{
+    position: relative;
+}
+
+.modal-message{
+    position: absolute;
+    top: 100px;
+    left: 25%;
+    width: 50%;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+    background-color: rgb(187, 187, 187);
+    border-radius: 50px;
+    
+}
+
 .wrapper__cards {
+    opacity: 1;
     padding: 30px 5%;
     display: flex;
     justify-content: space-evenly;
@@ -175,6 +213,111 @@ input:-ms-input-placeholder {
     align-content: flex-start;
 
 }
+
+.my-location{
+    width: 100%;
+    padding-left: 50px;
+    height: 50px;
+    vertical-align: middle;
+    color: $orange;
+    font-weight: 600;
+    font-size: 24px;
+    a{
+        color: $orange;
+    }
+}
+
+///
+///
+///
+
+
+.loader-card {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row nowrap;
+    flex-flow: row nowrap;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding-top: 2px;
+    border: none;
+    border-radius: 6px;
+    position: relative;
+    font-size: 15px;
+    font-weight: bold;
+    color: #FFF;
+    text-align: center;
+    text-transform: uppercase;
+    overflow: hidden;
+    background-color: rgb(187, 187, 187);
+    -webkit-box-shadow: 0px 9px 16px 0px rgba(250, 73, 35, 0.25);
+    box-shadow: 0px 9px 16px 0px rgba(250, 73, 35, 0.25);
+    -webkit-transition: ease 0.3s;
+    transition: ease 0.3s;
+}
+
+.loader-card:before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgb(187, 187, 187);
+    opacity: 0;
+    z-index: 1;
+    -webkit-transition: ease 0.3s;
+    transition: ease 0.3s;
+}
+
+.loader-card:after {
+    content: "";
+    display: block;
+    width: 30px;
+    opacity: 0.6;
+    height: 1000px;
+    margin-left: -350px;
+    background:  rgb(233, 233, 233);
+    position: absolute;
+    left: -40px;
+    top: -300px;
+    z-index: 1;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    -webkit-transition: all 0.1s;
+    transition: all 0.1s;
+    -webkit-animation-name: slideme;
+    animation-name: slideme;
+    -webkit-animation-duration: 3s;
+    animation-duration: 3s;
+    -webkit-animation-delay: 0.05s;
+    animation-delay: 0.05s;
+    -webkit-animation-timing-function: ease-in-out;
+    animation-timing-function: ease-in-out;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+}
+
+@-webkit-keyframes slideme { 0% { left: -350px; margin-left: 0px; }
+  50% { left: 130%; margin-left: 80px; }
+  100% { left: 130%; margin-left: 80px; } }
+
+///
+///
+//
+//
+
+
 
 .flip-container {
     width: 18%;

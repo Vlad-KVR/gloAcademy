@@ -19,35 +19,24 @@
 
 //получение данных
 const getData = () => fetch("./../dbHeroes-master/dbHeroes.json");
-// const request = new XMLHttpRequest();
-	// request.open("GET", "./../dbHeroes-master/dbHeroes.json");
 
-    // request.addEventListener('readystatechange', () => {
-    //     if (request.readyState !== 4) return;
-        
-    //     if (request.status === 200) {
-    //         callback(JSON.parse(request.response));
-    //     } else {
-    //         throw new Error(request.status + " " + request.statusText);
-    //     }
-    // });
-
-    // setTimeout(() => request.send(), 1000);
 
 
 //добавляем и удаляем информацию со страницы
 //Используем только addCards(data) и removeCards()
 class Cards {
-    constructor(wrapperImage, nameHero, back) {
+    constructor(wrapperImage, nameHero, back, container) {
         this.DATA = {};
         this._wrapperImage = wrapperImage;
         this._nameHero = nameHero;
         this._back = back;
+        this._container = container;
     }
     //add
     addCards(data) {
     
         for (let i = 0; i < this._wrapperImage.length; i++) {
+            this._container[i].classList.remove('loader-card');
             this.addFront(this._wrapperImage[i], this._nameHero[i], data[i]);
             this.addBack(this._back[i], data[i]);
         }
@@ -67,7 +56,7 @@ class Cards {
 
     addBack(back, dataItem) {
         if (!dataItem) return;
-    
+
             back.append(this.createDivForBack(dataItem));
             back.parentNode.classList.add('flipper-active');
     }
@@ -116,9 +105,15 @@ class Cards {
             item.textContent = '';
             item.parentNode.classList.remove('flipper-active');
         });
+        this._container.forEach(item => {
+            item.classList.add('loader-card');
+        });
     }
 
     createNewCards(newData) {
+        if (newData.length === DATA.data.length) {
+            myLocation.removeLocation();
+        }
         this.removeCards();
         this.addCards(newData);
     }
@@ -144,7 +139,8 @@ class Cards {
 }
 const cards = new Cards(document.querySelectorAll('.wrapper__image'),
                         document.querySelectorAll('.name-hero > h1'),
-                        document.querySelectorAll('.back'));
+                        document.querySelectorAll('.back'),
+                        document.querySelectorAll('.flip-container'));
 
 
 
@@ -360,7 +356,8 @@ class Data {
             if (!item.movies) return false;
             return [...item.movies].some(film => film.toLowerCase() === searchFilm.toLowerCase());
         });
-
+        if (newData.length === 0) return; 
+        myLocation.addLocation(searchFilm);
         pagination.refresh(newData);
         cards.createNewCards(newData);
     }
@@ -439,6 +436,7 @@ const searchFilm = DATA => {
     });
 };
 
+
 const menu = DATA => {
     const btnMenu = document.querySelector('.menu'),
     menu = document.querySelector('menu'),
@@ -461,10 +459,14 @@ const menu = DATA => {
 
         const handlerMenu = () => {
             menu.classList.toggle('active-menu');
+            menu.scrollTop = 0;
+            document.body.classList.toggle('scroll-hidden');
         };
+
     
         btnMenu.addEventListener('click', handlerMenu);
         menu.addEventListener('click', () => {
+            event.preventDefault();
             let target = event.target;
     
             if (!target.classList.contains('close-btn')) {
@@ -485,6 +487,47 @@ const menu = DATA => {
 };
 
 
+const logo = DATA => {
+    document.querySelector('img').addEventListener('click', () => {
+        pagination.refresh(DATA.data);
+        cards.createNewCards(DATA.data);
+    });
+};
+
+class MyLocation {
+    constructor(location) {
+        
+        this._all = 'All';
+        this._movie = '';
+        this._location = document.querySelector(location);
+        this.eventListener();
+    }
+
+
+    addLocation(movie) {
+        this._location.textContent = '';
+        this._location.insertAdjacentHTML('beforeend', 
+            `<a href="#" class="${this._all}">${this._all}</a>
+            <span>/</span>
+            <a href="#" class="${movie}">${movie}</a>`);
+    }
+
+    removeLocation() {
+        this._location.textContent = '';
+    }
+
+    eventListener() {
+        this._location.addEventListener('click', () => {
+            const target = event.target;
+            if (target.classList.contains(this._all)) {
+                pagination.refresh(DATA.data);
+                cards.createNewCards(DATA.data);
+            }
+        });
+    }
+}
+
+const myLocation = new MyLocation('.my-location');
 
 getData()
     .then(response => {
@@ -492,11 +535,19 @@ getData()
         return response.json();
     })
     .then(heroes => {
-        DATA.init(heroes);
-        pagination.init(DATA.data);
-        cards.init(DATA);
-        searchFilm(DATA);
-        menu(DATA);
+        setTimeout(() => {
+            DATA.init(heroes);
+            pagination.init(DATA.data);
+            cards.init(DATA);
+            searchFilm(DATA);
+            menu(DATA);
+            logo(DATA);
+        }, 2000);
     })
-    .catch(error => console.error("Ошибка " + error));
+    .catch(error => {
+        console.error(error);
+        document.querySelector('.wrapper__cards').style.opacity = 0;
+        document.querySelector('section').insertAdjacentHTML('afterbegin', `<div class="modal-message">
+                <h1>Oops was ${error}, please comeback later :(</h1></div>`);
+    });
 
