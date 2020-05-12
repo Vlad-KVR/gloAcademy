@@ -5,7 +5,7 @@ const togglePopUp = () => {
         
 
     const animationPopUp = () => {
-        popUp.style.marginLeft = '-100%';
+        
         if (window.innerWidth < 768) {
             popUp.style.display = popUp.style.display === 'block' ? '' : 'block';
             return;
