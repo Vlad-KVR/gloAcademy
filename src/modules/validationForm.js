@@ -11,7 +11,7 @@ const validationForm = () => {
     });
     [...formName, mess].forEach(item => {
         item.addEventListener('input', () => {
-            item.value = item.value.replace(/[^А-Яа-я ]/g, '');
+            item.value = item.value.replace(/[^А-Яа-я.,!?()"';:\- ]/g, '');
         });
     });
 };
