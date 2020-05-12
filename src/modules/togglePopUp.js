@@ -1,6 +1,8 @@
 const togglePopUp = () => {
     const popUp = document.querySelector('.popup'),
-        popUpBtn = document.querySelectorAll('.popup-btn');
+        popUpBtn = document.querySelectorAll('.popup-btn'),
+        popUpContent = document.querySelector('.popup-content');
+        popUp.style.backgroundColor = "#00000000";
 
     const animationPopUp = () => {
 

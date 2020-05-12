@@ -20,7 +20,7 @@ import validationForm from './modules/validationForm';
 import sendForm from './modules/sendForm';
 
 	//Таймер
-	countTimer('9 may 2020');
+	countTimer('14 may 2020');
 	//Меню
 	toggleMenu();
 
