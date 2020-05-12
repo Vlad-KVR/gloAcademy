@@ -2,35 +2,34 @@ const togglePopUp = () => {
     const popUp = document.querySelector('.popup'),
         popUpBtn = document.querySelectorAll('.popup-btn'),
         popUpContent = document.querySelector('.popup-content');
-        popUp.style.backgroundColor = "#00000000";
+        
 
     const animationPopUp = () => {
-
+        popUp.style.marginLeft = '-100%';
         if (window.innerWidth < 768) {
             popUp.style.display = popUp.style.display === 'block' ? '' : 'block';
             return;
         }
 
         let number = popUp.style.display === 'block' ? '2%' : '-100%';
-        popUp.children[0].style.marginLeft = number;
-        popUp.style.marginLeft = number;
+        popUpContent.style.marginLeft = number;
         popUp.style.display = 'block';
 
         const idInterval = setInterval(() => {
 
-            if (popUp.style.marginLeft === '0%' ||
-                popUp.style.marginLeft === '100%') {
+            if (popUpContent.style.marginLeft === '0%' ||
+            popUpContent.style.marginLeft === '100%') {
 
-                popUp.style.marginLeft = '0%';
-                popUp.children[0].style.marginLeft = '0%';
+                //popUp.style.marginLeft = '0%';
+                popUpContent.style.marginLeft = '0%';
                 clearInterval(idInterval);
                 return;
 
             }
 
-            number = Number.parseInt(popUp.style.marginLeft) + 2;
-            popUp.children[0].style.marginLeft = number + '%';
-            popUp.style.marginLeft = number + '%';
+            number = Number.parseInt(popUpContent.style.marginLeft) + 2;
+            popUpContent.style.marginLeft = number + '%';
+            //popUp.style.marginLeft = number + '%';
 
         }, 10);
 
