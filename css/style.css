@@ -323,10 +323,7 @@ section {
     text-decoration: underline; }
 
 .none-card {
-  background-image: url("../images/none-card.png");
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: 50%; }
+  opacity: 0; }
 
 .pagination {
   display: flex;
