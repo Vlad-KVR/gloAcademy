@@ -151,19 +151,6 @@ input:-ms-input-placeholder {
 section {
   position: relative; }
 
-.modal-message {
-  position: absolute;
-  top: 100px;
-  left: 25%;
-  width: 50%;
-  height: 500px;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  align-items: center;
-  background-color: #bbbbbb;
-  border-radius: 50px; }
-
 .wrapper__cards {
   opacity: 1;
   padding: 30px 5%;
@@ -247,8 +234,8 @@ section {
   transition: all 0.1s;
   -webkit-animation-name: slideme;
   animation-name: slideme;
-  -webkit-animation-duration: 3s;
-  animation-duration: 3s;
+  -webkit-animation-duration: 2s;
+  animation-duration: 2s;
   -webkit-animation-delay: 0.05s;
   animation-delay: 0.05s;
   -webkit-animation-timing-function: ease-in-out;
@@ -335,6 +322,12 @@ section {
   .back a:hover {
     text-decoration: underline; }
 
+.none-card {
+  background-image: url("../images/none-card.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 50%; }
+
 .pagination {
   display: flex;
   justify-content: center;
@@ -357,5 +350,37 @@ footer {
   background-color: #d84d00;
   padding: 25px;
   text-align: center; }
+
+.error {
+  position: absolute;
+  top: 100px;
+  left: 25%;
+  width: 50%;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  background-color: #bbbbbb;
+  border-radius: 50px; }
+
+.modal-message {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 5%;
+  left: 40%;
+  width: 20%;
+  padding: 30px 20px;
+  opacity: 0;
+  color: #303030;
+  background-color: whitesmoke;
+  border-radius: 50px;
+  z-index: 100; }
+  .modal-message h1 {
+    font-size: 22px;
+    text-align: center;
+    vertical-align: middle; }
 
 /*# sourceMappingURL=style.css.map */
