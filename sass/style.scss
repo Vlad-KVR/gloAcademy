@@ -42,7 +42,7 @@ body .menu:hover {
 
 body menu {
     position: fixed;
-    width: 47.7%;
+    width: 47.5%;
     height: 100vh;
     background-color: $white;
     opacity: 1;
@@ -454,7 +454,7 @@ footer {
 
 .modal-message {
     position: fixed;
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     top: 5%;
@@ -463,8 +463,9 @@ footer {
     padding: 30px 20px;
     color: $black;
     background-color: $white;
+    z-index: 100;
     border-radius: 50px;
-    z-index: -1;
+    
     h1{
         font-size: 22px;
         text-align: center;

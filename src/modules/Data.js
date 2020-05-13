@@ -3,6 +3,9 @@ class Data {
     constructor() {
         this._data = [];
         this._listFilms = [];
+        this.myLocation = {};
+        this.cards = {};
+        this.pagination = {};
     }
 
     get data() {
@@ -29,18 +32,20 @@ class Data {
         //если такого фильма нет, то возвращаемся
         if (newData.length === 0) return false;
         //добавляем нашу локацию к примеру "All/The Avrngers"
-        myLocation.addLocation(searchFilm);
+        this.myLocation.addLocation(searchFilm);
         //обновляем пагинацию и загружаем информацию в карточки
-        pagination.refresh(newData);
-        cards.createNewCards(newData);
+        this.pagination.refresh(newData);
+        this.cards.createNewCards(newData);
         return true;
     }
 
 
     //инициализация
-    init(data) {
+    init(data, myLocation, cards, pagination) {
         this._data = data;
-
+        this.myLocation = myLocation;
+        this.cards = cards;
+        this.pagination = pagination;
         //заполняем list films списком фильмов
         data.forEach(item => this._listFilms = this._listFilms.concat(item.movies));
         this._listFilms = this._listFilms.filter((item, i) => 

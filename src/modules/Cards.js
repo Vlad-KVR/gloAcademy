@@ -2,6 +2,7 @@
 class Cards {
     constructor(wrapperImage, nameHero, back, container, front) {
         this.DATA = {};
+        this.myLocation = {};
         this._wrapperImage = document.querySelectorAll(wrapperImage);
         this._nameHero = document.querySelectorAll(nameHero);
         this._back = document.querySelectorAll(back);
@@ -106,10 +107,9 @@ class Cards {
 
     createNewCards(newData) {
         //если длина новых карточек равна длине всех карточек, то забываем путь (All/Something)
-        if (newData.length === DATA.data.length) {
-            myLocation.removeLocation();
-        } else {
-            window.scrollTop = '0px';
+        
+        if (newData.length === this.DATA.data.length) {
+            this.myLocation.removeLocation();
         }
         //забываем старые карточки и добавляем новые
         this.removeCards();
@@ -125,13 +125,14 @@ class Cards {
                 const target = event.target;
                 if (target.classList.contains('film')) {
                     const film = target.textContent.replace(/,/, '');
-                    DATA.filterFilm(film.trim());
+                    this.DATA.filterFilm(film.trim());
                 }
             });
         });
     }
     //инициализация объекта
-    init(DATA) {
+    init(DATA, myLocation) {
+        this.myLocation = myLocation;
         this.DATA = DATA;
         this.addCards(DATA.data);
         this.eventListener();

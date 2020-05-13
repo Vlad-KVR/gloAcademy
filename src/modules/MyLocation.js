@@ -5,7 +5,9 @@ class MyLocation {
         this._all = 'All';
         this._movie = '';
         this._location = document.querySelector(location);
-        this.eventListener();
+        this.pagination = {};
+        this.cards = {};
+        this.DATA = {};
     }
 
     //добавляем локацию
@@ -23,14 +25,21 @@ class MyLocation {
     //слушатель
     eventListener() {
         this._location.addEventListener('click', () => {
+            event.preventDefault();
             const target = event.target;
             if (target.classList.contains(this._all)) {
                 console.log(1);
-                target.preventDefault();
-                pagination.refresh(DATA.data);
-                cards.createNewCards(DATA.data);
+                this.pagination.refresh(this.DATA.data);
+                this.cards.createNewCards(this.DATA.data);
             }
         });
+    }
+
+    init(pagination, cards, DATA) {
+        this.pagination = pagination;
+        this.cards = cards;
+        this.DATA = DATA;
+        this.eventListener();
     }
 }
 export default MyLocation;

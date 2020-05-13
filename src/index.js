@@ -29,12 +29,13 @@ fetch("./../dbHeroes-master/dbHeroes.json")
     })
     .then(heroes => {
         setTimeout(() => {
-            DATA.init(heroes);
+            DATA.init(heroes,myLocation,cards,pagination);
             pagination.init(DATA.data);
-            cards.init(DATA);
+            cards.init(DATA, myLocation);
+            myLocation.init(pagination,cards,DATA);
             searchFilm(DATA);
             menu(DATA);
-            logo(DATA);
+            logo(DATA, pagination, cards);
         }, 2000);
     })
     .catch(error => {

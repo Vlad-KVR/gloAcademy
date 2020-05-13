@@ -49,18 +49,19 @@ const searchFilm = DATA => {
         if (input.value === '') {
             const message = document.querySelector('.modal-message');
             message.childNodes[1].textContent = "Enter movie name";
-            message.style.zIndex = 100;
-            setTimeout(() => message.style.zIndex = -1, 2000);
+            message.style.display = 'flex';
+            setTimeout(() => message.style.display = 'none', 2000);
             return;
         }
 
         if (!DATA.filterFilm(input.value)) {
             const message = document.querySelector('.modal-message');
             message.childNodes[1].textContent = "We don’t have such a movie";
-            message.style.zIndex = 100;
-            setTimeout(() => message.style.zIndex = -1, 2000);
+            message.style.display = 'flex';
+            setTimeout(() => message.style.display = 'none', 2000);
         }
-        input.value = '';      
+        input.value = '';
+        showFilms();
     });
 };
 export default searchFilm;
